@@ -1,7 +1,7 @@
 import './App.css';
 import React, { Component } from 'react';
-import Searchbar from './components/Searchbar/Searchbar';
-import ImageInfo from './components/ImageGalleryItem/';
+import Searchbar from './components/Searchbar';
+import ImageGallery from './components/ImageGallery/ImageGallery';
 
 class App extends Component {
   state = {
@@ -16,7 +16,7 @@ class App extends Component {
     return (
       <div>
         <Searchbar onSubmit={this.handleSearchForm} />
-        <ImageInfo image={this.state.imageQuery} />
+        <ImageGallery image={this.state.imageQuery} />
       </div>
     );
   }
