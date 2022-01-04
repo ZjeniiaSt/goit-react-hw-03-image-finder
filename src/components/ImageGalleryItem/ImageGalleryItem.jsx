@@ -1,11 +1,13 @@
-function ImageItem({ image: { hits } }) {
+function ImageItem({ data, onClickGalleryItem }) {
   return (
     <>
-      {hits.map(image => (
-        <li key={image.id}>
-          <img src={image.webformatURL} data-source={image.largeImageURL} alt={image.tags} />
-        </li>
-      ))}
+      {data.map(({ id, webformatURL, largeImageURL, tags }) => {
+        return (
+          <li key={id} onClick={() => onClickGalleryItem(largeImageURL, tags)} ssss>
+            <img src={webformatURL} alt={tags} />
+          </li>
+        );
+      })}
     </>
   );
 }
