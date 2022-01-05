@@ -5,6 +5,7 @@ import Modal from '../Modal';
 import Button from '../Button';
 import Load from '../Loader';
 import toast from 'react-hot-toast';
+import PropTypes from 'prop-types';
 
 class ImageGallery extends Component {
   state = {
@@ -21,26 +22,18 @@ class ImageGallery extends Component {
     const nextImage = this.props.images;
 
     if (prevImage !== nextImage) {
-      this.setState(prevState => {
-        return {
-          status: 'pending',
-        };
-      });
+      this.setState({ status: 'pending' });
 
-      fetchImages(nextImage, 1).then(data => {
-        if (data.total === 0) {
-          toast.error(`Nothing found`);
-          return this.setState({ status: 'idle' });
-        } else {
-          return this.setState(prevState => {
-            return {
-              images: data.hits,
-              status: 'resolved',
-              page: prevState.page + 1,
-            };
-          });
-        }
-      });
+      fetchImages(nextImage, 1)
+        .then(data => {
+          if (data.total === 0) {
+            toast.error('Nothing found');
+            return;
+          } else {
+            this.setState({ images: data.hits, status: 'resolved', page: prevState.page + 1 });
+          }
+        })
+        .catch(error => toast.error('Something wrong'));
     }
   }
 
@@ -66,6 +59,17 @@ class ImageGallery extends Component {
         };
       }),
     );
+
+    this.scrollPage();
+  };
+
+  scrollPage = () => {
+    setTimeout(() => {
+      window.scrollBy({
+        top: document.documentElement.clientHeight - 100,
+        behavior: 'smooth',
+      });
+    }, 500);
   };
 
   render() {
@@ -100,5 +104,9 @@ class ImageGallery extends Component {
     }
   }
 }
+
+ImageGallery.propTypes = {
+  nextImage: PropTypes.string,
+};
 
 export default ImageGallery;

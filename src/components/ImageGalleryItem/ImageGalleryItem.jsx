@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 function ImageGalleryItem({ data, onOpenModal }) {
   return (
     <>
@@ -11,4 +13,16 @@ function ImageGalleryItem({ data, onOpenModal }) {
     </>
   );
 }
+
+ImageGalleryItem.propTypes = {
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      webformatURL: PropTypes.string.isRequired,
+      largeImageURL: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
+  onOpenModal: PropTypes.func.isRequired,
+};
+
 export default ImageGalleryItem;
