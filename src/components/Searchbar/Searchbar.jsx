@@ -1,20 +1,20 @@
-import React from 'react';
 import { Component } from 'react';
+import toast from 'react-hot-toast';
 
 class Searchbar extends Component {
   state = {
     imageQuery: '',
   };
 
-  handleImageChange = event => {
+  onImageChange = event => {
     this.setState({ imageQuery: event.currentTarget.value.toLowerCase() });
   };
 
-  handleSubmit = event => {
+  onSubmit = event => {
     event.preventDefault();
 
     if (this.state.imageQuery.trim() === '') {
-      alert('🦄 Wow so easy!');
+      toast.error(`Enter a search word`);
       return;
     }
     this.props.onSubmit(this.state.imageQuery);
@@ -24,7 +24,7 @@ class Searchbar extends Component {
   render() {
     return (
       <header className="searchbar">
-        <form className="form" onSubmit={this.handleSubmit}>
+        <form className="form" onSubmit={this.onSubmit}>
           <input
             className="input"
             type="text"
@@ -32,7 +32,7 @@ class Searchbar extends Component {
             autoFocus
             placeholder="Search images and photos"
             value={this.state.imageQuery}
-            onChange={this.handleImageChange}
+            onChange={this.onImageChange}
           />
         </form>
       </header>
