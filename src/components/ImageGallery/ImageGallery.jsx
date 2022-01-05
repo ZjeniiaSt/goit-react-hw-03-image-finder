@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
+import ImageGalleryItem from '../ImageGalleryItem';
 import fetchImages from '../services/apiServise';
 import Modal from '../Modal';
 
@@ -9,8 +9,7 @@ class ImageGallery extends Component {
     status: 'idle',
     page: 1,
     showModal: false,
-    imageForModal: '',
-    title: '',
+    largeImageURL: '',
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -45,13 +44,13 @@ class ImageGallery extends Component {
     this.setState(({ showModal }) => ({ showModal: !showModal }));
   };
 
-  onClickGalleryItem = (src, alt) => {
+  onOpenModal = event => {
+    this.setState({ largeImageURL: event.target.dataset.source });
     this.toggleModal();
-    this.setState({ imageForModal: src, title: alt });
   };
 
   render() {
-    const { images, status, showModal, imageForModal, title } = this.state;
+    const { images, status, showModal, largeImageURL } = this.state;
 
     if (status === 'idle') {
       return <div>give me name</div>;
@@ -63,14 +62,14 @@ class ImageGallery extends Component {
 
     if (status === 'resolved') {
       return (
-        <ul>
-          <ImageGalleryItem onClick={this.onClickGalleryItem} data={images}></ImageGalleryItem>
+        <>
+          <ImageGalleryItem data={images} onOpenModal={this.onOpenModal}></ImageGalleryItem>
           {showModal && (
-            <Modal onClick={this.onClickGalleryItem}>
-              <img src={imageForModal} alt={title} />
+            <Modal onClose={this.toggleModal}>
+              <img src={largeImageURL} alt="" />
             </Modal>
           )}
-        </ul>
+        </>
       );
     }
   }

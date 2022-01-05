@@ -1,14 +1,14 @@
-function ImageItem({ data, onClickGalleryItem }) {
+function ImageGalleryItem({ data, onOpenModal }) {
   return (
     <>
       {data.map(({ id, webformatURL, largeImageURL, tags }) => {
         return (
-          <li key={id} onClick={() => onClickGalleryItem(largeImageURL, tags)} ssss>
-            <img src={webformatURL} alt={tags} />
+          <li key={id}>
+            <img src={webformatURL} alt={tags} data-source={largeImageURL} onClick={onOpenModal} />
           </li>
         );
       })}
     </>
   );
 }
-export default ImageItem;
+export default ImageGalleryItem;
