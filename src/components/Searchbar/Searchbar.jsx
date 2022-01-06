@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import toast from 'react-hot-toast';
+import { SearchbarSt, SearchFormSt, Input } from './Searchbar.style';
 import PropTypes from 'prop-types';
 
 class Searchbar extends Component {
@@ -24,9 +25,9 @@ class Searchbar extends Component {
 
   render() {
     return (
-      <header className="searchbar">
-        <form className="form" onSubmit={this.onSubmit}>
-          <input
+      <SearchbarSt className="searchbar">
+        <SearchFormSt className="form" onSubmit={this.onSubmit}>
+          <Input
             className="input"
             type="text"
             autoComplete="off"
@@ -35,8 +36,8 @@ class Searchbar extends Component {
             value={this.state.imageQuery}
             onChange={this.onImageChange}
           />
-        </form>
-      </header>
+        </SearchFormSt>
+      </SearchbarSt>
     );
   }
 }

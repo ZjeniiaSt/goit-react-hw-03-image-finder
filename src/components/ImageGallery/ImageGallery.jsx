@@ -1,11 +1,12 @@
 import { Component } from 'react';
 import ImageGalleryItem from '../ImageGalleryItem';
-import fetchImages from '../services/apiServise';
+import fetchImages from '../services';
 import Modal from '../Modal';
-import Button from '../Button';
+import OnButton from '../Button';
 import Load from '../Loader';
 import toast from 'react-hot-toast';
 import PropTypes from 'prop-types';
+import { Ul } from './ImageGallery.style';
 
 class ImageGallery extends Component {
   state = {
@@ -90,10 +91,10 @@ class ImageGallery extends Component {
     if (status === 'resolved') {
       return (
         <>
-          <ImageGalleryItem data={images} onOpenModal={this.onOpenModal}></ImageGalleryItem>
-
-          {images.length > 11 && <Button onBtnClick={this.onBtnClick} />}
-
+          <Ul>
+            <ImageGalleryItem data={images} onOpenModal={this.onOpenModal}></ImageGalleryItem>
+          </Ul>
+          {images.length > 11 && <OnButton onBtnClick={this.onBtnClick} />}
           {showModal && (
             <Modal onClose={this.toggleModal}>
               <img src={largeImageURL} alt={alt} width="750" />
