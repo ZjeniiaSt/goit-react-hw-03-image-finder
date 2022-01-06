@@ -1,0 +1,1 @@
+{"version":3,"file":"static/css/main.be21d742.css","mappings":"AAAA,sBACE,iBACF","sources":["components/Loader/Loader.module.css"],"sourcesContent":[".loader {\n  text-align: center;\n}\n"],"names":[],"sourceRoot":""}
