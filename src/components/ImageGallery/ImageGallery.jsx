@@ -1,113 +1,27 @@
-import { Component } from 'react';
-import ImageGalleryItem from '../ImageGalleryItem';
-import fetchImages from '../services';
-import Modal from '../Modal';
-import OnButton from '../Button';
-import Load from '../Loader';
-import toast from 'react-hot-toast';
 import PropTypes from 'prop-types';
 import { Ul } from './ImageGallery.style';
+import ImageGalleryItem from '../ImageGalleryItem/';
+import propTypes from 'prop-types';
 
-class ImageGallery extends Component {
-  state = {
-    images: [],
-    status: 'idle',
-    page: 1,
-    showModal: false,
-    largeImageURL: '',
-    alt: '',
-  };
-
-  componentDidUpdate(prevProps, prevState) {
-    const prevImage = prevProps.images;
-    const nextImage = this.props.images;
-
-    if (prevImage !== nextImage) {
-      this.setState({ status: 'pending' });
-
-      fetchImages(nextImage, 1)
-        .then(data => {
-          if (data.total === 0) {
-            toast.error('Nothing found');
-            return;
-          } else {
-            this.setState({ images: data.hits, status: 'resolved', page: prevState.page + 1 });
-          }
-        })
-        .catch(error => toast.error('Something wrong'));
-    }
-  }
-
-  toggleModal = () => {
-    this.setState(({ showModal }) => ({ showModal: !showModal }));
-  };
-
-  onOpenModal = event => {
-    this.setState({ largeImageURL: event.target.dataset.source, alt: event.target.alt });
-    this.toggleModal();
-  };
-
-  onBtnClick = event => {
-    const nextImage = this.props.images;
-    const page = this.state.page;
-
-    fetchImages(nextImage, page).then(data =>
-      this.setState(prevState => {
-        return {
-          page: prevState.page + 1,
-          images: [...prevState.images, ...data.hits],
-          status: 'resolved',
-        };
-      }),
-    );
-
-    this.scrollPage();
-  };
-
-  scrollPage = () => {
-    setTimeout(() => {
-      window.scrollBy({
-        top: document.documentElement.clientHeight - 100,
-        behavior: 'smooth',
-      });
-    }, 500);
-  };
-
-  render() {
-    const { images, status, showModal, largeImageURL, alt } = this.state;
-
-    if (status === 'idle') {
-      return <></>;
-    }
-
-    if (status === 'pending') {
-      return (
-        <div>
-          <Load />
-        </div>
-      );
-    }
-
-    if (status === 'resolved') {
-      return (
-        <>
-          <Ul>
-            <ImageGalleryItem data={images} onOpenModal={this.onOpenModal}></ImageGalleryItem>
-          </Ul>
-          {images.length > 11 && <OnButton onBtnClick={this.onBtnClick} />}
-          {showModal && (
-            <Modal onClose={this.toggleModal}>
-              <img src={largeImageURL} alt={alt} width="750" />
-            </Modal>
-          )}
-        </>
-      );
-    }
-  }
+function ImageGallery({ images, onOpenModal }) {
+  return (
+    <Ul>
+      {images.map(({ id, tags, webformatURL, largeImageURL }) => (
+        <ImageGalleryItem
+          key={id}
+          tags={tags}
+          webformatURL={webformatURL}
+          largeImageURL={largeImageURL}
+          onOpenModal={onOpenModal}
+        />
+      ))}
+    </Ul>
+  );
 }
 
 ImageGallery.propTypes = {
-  nextImage: PropTypes.string,
+  images: PropTypes.arrayOf(PropTypes.shape({ id: propTypes.number.isRequired })),
+  onOpenModal: propTypes.func.isRequired,
 };
 
 export default ImageGallery;
